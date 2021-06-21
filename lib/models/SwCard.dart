@@ -1,12 +1,16 @@
+import 'package:informationbroker/models/SwExpansions.dart';
+
 class SwCard {
   int id;
   String side;
   String title;
   String? backTitle;
   String imageUrl;
+  String? backImageUrl;
   String type;
   String? subType;
   String gametext;
+  String? backGametext;
   String? lore;
   int? lightSideIcons;
   int? darkSideIcons;
@@ -27,10 +31,14 @@ class SwCard {
         darkSideIcons = json['front']['darkSideIcons'],
         icons = castListString(json['front']['icons']),
         characteristics = castListString(json['front']['characteristics']),
-        set = json['set'],
+        set = setName(json['set']) ?? json['set'],
         uniqueness = json['front']['uniqueness'] ?? "",
-        imageUrl = json['front']['imageUrl'];
+        imageUrl = json['front']['imageUrl'],
+        backImageUrl = json['back'] != null ? json['back']['imageUrl'] : null,
+        backGametext = json['back'] != null ? json['back']['gametext'] : null,
+        backTitle = json['back'] != null ? json['back']['title'] : null;
 
+// TODO: PR the datset: Some AIs and V-cards don't have uniqueness field set
   String get displayUniqueness =>
       uniqueness.replaceAll('*', '•').replaceAll('<>', '⬦');
 
@@ -46,12 +54,16 @@ class SwCard {
   ];
 
   String get displayTitle => "$displayUniqueness$title $displaySet";
-  String get displaySet => _cardsWithDupes.contains(title) ? '($set)' : '';
+  String get displaySet => _cardsWithDupes.contains(title) ? "($set)" : '';
+
+  String get typeSuffix =>
+      subType == null ? "" : " - ${(subType ?? '').split(':')[0]}";
+  String get displayType => "$type$typeSuffix";
 
   static String normalizeTitle(String s) {
-    List<String> titles = s.split(' / ');
-    String frontTitle = titles[0];
-    String backTitle = titles.length > 1 ? titles[1] : '';
+    List<String> titles = s.split('/');
+    String frontTitle = titles[0].trim();
+    String backTitle = titles.length > 1 ? titles[1].trim() : '';
     String vSuffix = backTitle.endsWith('(V)') ? ' (V)' : '';
 
     return (frontTitle + vSuffix).replaceAll('•', '').replaceAll('<>', '');

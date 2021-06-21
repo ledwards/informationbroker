@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:informationbroker/widgets/CardTableWidget.dart';
+import 'package:informationbroker/widgets/SearchWidget.dart';
 import 'models/SwCard.dart';
 import 'utils/Loader.dart';
 
@@ -15,21 +17,21 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.grey,
       ),
-      home: MyHomePage(title: 'Home Page'),
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+class HomePage extends StatefulWidget {
+  HomePage({Key? key}) : super(key: key);
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  List<SwCard> allCards = [];
+class HomePageState extends State<HomePage> {
+  List<SwCard> cardPool = [];
+  List<SwCard> cards = [];
 
   @override
   void initState() {
@@ -49,27 +51,30 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     setState(() {
-      allCards = results[0];
+      cardPool = results[0];
+      cards = List<SwCard>.from(cardPool);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    print('rebuilding main');
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text("Information Broker"),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Loaded this many cards:',
-            ),
-            Text(
-              allCards.length.toString(),
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            SearchWidget(
+                cardPool: cardPool,
+                onSearch: (List<SwCard> foundCards) {
+                  setState(() {
+                    cards = foundCards;
+                  });
+                }),
+            CardTableWidget(cards: cards),
           ],
         ),
       ),

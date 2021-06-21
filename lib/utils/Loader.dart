@@ -1,7 +1,7 @@
 import 'dart:convert' show json;
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import '../models/SwCard.dart';
+import 'package:informationbroker/models/SwCard.dart';
 
 class Loader {
   Loader(this.context);
