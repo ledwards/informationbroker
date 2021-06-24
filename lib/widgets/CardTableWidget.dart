@@ -11,15 +11,22 @@ class CardTableWidget extends StatefulWidget {
 }
 
 class _CardTableWidgetState extends State<CardTableWidget> {
+  late List<SwCard> _cards;
+
+  void initState() {
+    _cards = widget.cards;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(8),
-        itemCount: widget.cards.length,
+        itemCount: _cards.length,
         itemBuilder: (BuildContext context, int index) {
-          SwCard card = widget.cards[index];
+          SwCard card = _cards[index];
           Color textColor =
               (card.side == 'Dark' ? Colors.white70 : Colors.black87);
 

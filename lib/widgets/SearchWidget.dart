@@ -20,7 +20,6 @@ class _SearchWidgetState extends State<SearchWidget> {
   void initState() {
     _cardPool = widget.cardPool;
     _foundCards = List<SwCard>.from(_cardPool);
-
     super.initState();
   }
 
