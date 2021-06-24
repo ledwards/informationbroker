@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:informationbroker/widgets/CardTableWidget.dart';
+import 'package:informationbroker/widgets/FilterButton.dart';
 import 'package:informationbroker/widgets/SearchWidget.dart';
-import 'models/SwCard.dart';
-import 'utils/Loader.dart';
+import 'package:informationbroker/models/SwCard.dart';
+import 'package:informationbroker/utils/Loader.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,8 +31,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List<SwCard> cardPool = [];
-  List<SwCard> cards = [];
+  List<SwCard>? _cardPool;
+  List<SwCard>? _cards;
 
   @override
   void initState() {
@@ -45,37 +46,47 @@ class HomePageState extends State<HomePage> {
 
     List results = await Future.wait([loader.cards()]).then((res) {
       loadedCards = res[0];
+
       return [
         loadedCards,
       ];
     });
 
     setState(() {
-      cardPool = results[0];
-      cards = List<SwCard>.from(cardPool);
+      _cardPool = results[0];
+      _cards = List<SwCard>.from(_cardPool ?? []);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print('rebuilding main');
     return Scaffold(
       appBar: AppBar(
         title: Text("Information Broker"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FilterButton(),
+          )
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SearchWidget(
-                cardPool: cardPool,
-                onSearch: (List<SwCard> foundCards) {
-                  setState(() {
-                    cards = foundCards;
-                  });
-                }),
-            CardTableWidget(cards: cards),
-          ],
+          children: (_cardPool ?? []).isEmpty
+              ? [
+                  Text("Loading..."),
+                ]
+              : <Widget>[
+                  SearchWidget(
+                      cardPool: _cardPool ?? [],
+                      onSearch: (List<SwCard> foundCards) {
+                        setState(() {
+                          _cards = List<SwCard>.from(foundCards);
+                        });
+                      }),
+                  CardTableWidget(cards: _cards ?? []),
+                ],
         ),
       ),
     );

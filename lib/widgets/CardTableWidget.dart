@@ -13,8 +13,6 @@ class CardTableWidget extends StatefulWidget {
 class _CardTableWidgetState extends State<CardTableWidget> {
   @override
   Widget build(BuildContext context) {
-    print(widget.cards.length);
-
     return Expanded(
       child: ListView.builder(
         shrinkWrap: true,

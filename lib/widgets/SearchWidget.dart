@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:informationbroker/main.dart';
 import 'package:informationbroker/models/SwCard.dart';
 
 class SearchWidget extends StatefulWidget {
@@ -14,7 +13,16 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  final searchWidgetController = TextEditingController();
+  late final searchWidgetController = TextEditingController();
+  late List<SwCard> _cardPool;
+  late List<SwCard> _foundCards;
+
+  void initState() {
+    _cardPool = widget.cardPool;
+    _foundCards = List<SwCard>.from(_cardPool);
+
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -24,18 +32,30 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      onChanged: (text) {
-        List<SwCard> foundCards = widget.cardPool.where((element) =>
-            // TODO: apostrophes, and maybe other letters don't work here
-            element.title.toLowerCase().contains(text.toLowerCase())).toList();
+    return Column(
+      children: [
+        TextField(
+          onChanged: (text) {
+            _foundCards = _foundCards.where((element) {
+              // TODO: apostrophes, and maybe other letters don't work here
+              return SwCard.comparisonTitle(element.title)
+                  .contains(SwCard.comparisonTitle(text));
+            }).toList();
 
-        setState(() {
-          widget.onSearch(foundCards);
-        });
-      },
-      decoration: InputDecoration(
-          border: OutlineInputBorder(), hintText: 'Search by title'),
+            print(_foundCards.length);
+
+            setState(() {
+              widget.onSearch(_foundCards);
+            });
+          },
+          decoration: InputDecoration(
+              border: OutlineInputBorder(), hintText: 'Search cards by title'),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text("Showing ${_foundCards.length} cards"),
+        ),
+      ],
     );
   }
 }

@@ -38,10 +38,6 @@ class SwCard {
         backGametext = json['back'] != null ? json['back']['gametext'] : null,
         backTitle = json['back'] != null ? json['back']['title'] : null;
 
-// TODO: PR the datset: Some AIs and V-cards don't have uniqueness field set
-  String get displayUniqueness =>
-      uniqueness.replaceAll('*', '•').replaceAll('<>', '⬦');
-
   List<String> _cardsWithDupes = [
     'Sense',
     'Alter',
@@ -53,12 +49,15 @@ class SwCard {
     'Tusken Raider'
   ];
 
+  String get _typeSuffix =>
+      subType == null ? "" : " - ${(subType ?? '').split(':')[0]}";
+
   String get displayTitle => "$displayUniqueness$title $displaySet";
   String get displaySet => _cardsWithDupes.contains(title) ? "($set)" : '';
-
-  String get typeSuffix =>
-      subType == null ? "" : " - ${(subType ?? '').split(':')[0]}";
-  String get displayType => "$type$typeSuffix";
+  String get displayType => "$type$_typeSuffix";
+  // TODO: PR the datset: Some AIs and V-cards don't have uniqueness field set
+  String get displayUniqueness =>
+      uniqueness.replaceAll('*', '•').replaceAll('<>', '⬦');
 
   static String normalizeTitle(String s) {
     List<String> titles = s.split('/');
@@ -74,5 +73,9 @@ class SwCard {
 
   static List<SwCard> listFromJson(List list) {
     return list.map((cardMap) => SwCard.fromJson(cardMap)).toList();
+  }
+
+  static String comparisonTitle(String title) {
+    return title.toLowerCase();
   }
 }
