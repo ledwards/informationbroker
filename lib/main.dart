@@ -5,7 +5,6 @@ import 'package:informationbroker/widgets/CardsListWidget.dart';
 import 'package:informationbroker/widgets/FilterButton.dart';
 import 'package:informationbroker/widgets/SearchWidget.dart';
 import 'package:informationbroker/models/SwCard.dart';
-import 'package:informationbroker/models/SwCardsList.dart';
 import 'package:informationbroker/models/FilterSet.dart';
 import 'package:informationbroker/utils/Loader.dart';
 
@@ -13,7 +12,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SwCardsList()),
         ChangeNotifierProvider(create: (_) => FilterSet()),
       ],
       child: MyApp(),

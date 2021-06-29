@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:informationbroker/models/FilterSet.dart';
-import 'package:provider/provider.dart';
 import 'package:informationbroker/models/SwCard.dart';
-import 'package:informationbroker/models/SwCardsList.dart';
+import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
   SearchWidget(List<SwCard> currentCards, {Key? key}) : super(key: key);

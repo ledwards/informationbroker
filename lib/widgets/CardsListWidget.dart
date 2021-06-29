@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:informationbroker/models/SwCard.dart';
-import 'package:informationbroker/models/SwCardsList.dart';
 import 'package:informationbroker/widgets/CardModal.dart';
 import 'package:provider/provider.dart';
 
