@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:informationbroker/widgets/CardTableWidget.dart';
+import 'package:informationbroker/models/FilterSet.dart';
+import 'package:provider/provider.dart';
+import 'package:informationbroker/widgets/CardsListWidget.dart';
 import 'package:informationbroker/widgets/FilterButton.dart';
 import 'package:informationbroker/widgets/SearchWidget.dart';
 import 'package:informationbroker/models/SwCard.dart';
+import 'package:informationbroker/models/SwCardsList.dart';
+import 'package:informationbroker/models/FilterSet.dart';
 import 'package:informationbroker/utils/Loader.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => SwCardsList()),
+        ChangeNotifierProvider(create: (_) => FilterSet()),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,8 +43,9 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List<SwCard>? _cardPool;
-  List<SwCard>? _cards;
+  List<SwCard>? _cardPool; // TODO: default to empty
+  List<SwCard>? _currentCards;
+  FilterSet get _filterSet => Provider.of<FilterSet>(context, listen: false);
 
   @override
   void initState() {
@@ -52,9 +65,16 @@ class HomePageState extends State<HomePage> {
       ];
     });
 
+    _filterSet.addListener(() {
+      setState(() {
+        _currentCards = _filterSet.cards;
+      });
+    });
+
     setState(() {
       _cardPool = results[0];
-      _cards = List<SwCard>.from(_cardPool ?? []);
+      _filterSet.cardPool = _cardPool!;
+      _currentCards = List<SwCard>.from(_cardPool!);
     });
   }
 
@@ -71,23 +91,26 @@ class HomePageState extends State<HomePage> {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: (_cardPool ?? []).isEmpty
-              ? [
-                  Text("Loading..."),
-                ]
-              : <Widget>[
-                  SearchWidget(
-                      cardPool: _cardPool ?? [],
-                      onSearch: (List<SwCard> foundCards) {
-                        setState(() {
-                          _cards = List<SwCard>.from(foundCards);
-                        });
-                      }),
-                  CardTableWidget(cards: _cards ?? []),
-                ],
-        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+          (_currentCards) == null
+              ? Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text("Loading..."),
+                )
+              : SearchWidget(
+                  _currentCards!,
+                ),
+          (_currentCards) == null
+              ? Text("")
+              : Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                      "Showing ${(_currentCards ?? []).length} cards"), // TODO: Move this out of search widget!
+                ),
+          (_currentCards ?? []).isEmpty
+              ? Text("")
+              : CardsListWidget(cards: _currentCards!),
+        ]),
       ),
     );
   }

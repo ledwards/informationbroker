@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:informationbroker/models/SwCard.dart';
+import 'package:informationbroker/models/SwCardsList.dart';
 import 'package:informationbroker/widgets/CardModal.dart';
+import 'package:provider/provider.dart';
 
-class CardTableWidget extends StatefulWidget {
-  CardTableWidget({Key? key, required this.cards}) : super(key: key);
+class CardsListWidget extends StatefulWidget {
+  CardsListWidget({Key? key, required this.cards}) : super(key: key);
   final List<SwCard> cards;
 
   @override
-  State<CardTableWidget> createState() => _CardTableWidgetState();
+  State<CardsListWidget> createState() => _CardsListWidgetState();
 }
 
-class _CardTableWidgetState extends State<CardTableWidget> {
-  late List<SwCard> _cards;
+class _CardsListWidgetState extends State<CardsListWidget> {
+  get _cards => widget.cards;
 
   void initState() {
-    _cards = widget.cards;
     super.initState();
   }
 

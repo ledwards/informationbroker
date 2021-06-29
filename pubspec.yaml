@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^4.3.3
   card_settings: ^2.0.3
 
 

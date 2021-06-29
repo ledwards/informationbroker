@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:informationbroker/models/SwCard.dart';
+import 'package:provider/provider.dart';
 import 'package:card_settings/card_settings.dart';
 
 class FilterForm extends StatefulWidget {
