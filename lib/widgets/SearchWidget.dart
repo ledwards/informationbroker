@@ -4,7 +4,7 @@ import 'package:informationbroker/models/SwCard.dart';
 import 'package:provider/provider.dart';
 
 class SearchWidget extends StatefulWidget {
-  SearchWidget(List<SwCard> currentCards, {Key? key}) : super(key: key);
+  SearchWidget({Key? key}) : super(key: key);
 
   @override
   _SearchWidgetState createState() => _SearchWidgetState();

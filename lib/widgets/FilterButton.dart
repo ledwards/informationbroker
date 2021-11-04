@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:informationbroker/models/SwCard.dart';
 import 'package:informationbroker/widgets/FilterForm.dart';
 
 class FilterButton extends StatefulWidget {
-  FilterButton({Key? key}) : super(key: key);
+  FilterButton({Key? key, required this.cardPool}) : super(key: key);
+
+  final List<SwCard> cardPool;
 
   @override
   State<FilterButton> createState() => _FilterButtonState();
@@ -10,6 +13,8 @@ class FilterButton extends StatefulWidget {
 
 class _FilterButtonState extends State<FilterButton> {
   IconData filterIcon = Icons.filter_alt_outlined;
+
+  List<SwCard> get _cardPool => widget.cardPool;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,7 @@ class _FilterButtonState extends State<FilterButton> {
             context: context,
             builder: (BuildContext context) {
               return Center(
-                child: FilterForm(onFilter: () => null),
+                child: FilterForm(cardPool: _cardPool),
               );
             });
       },

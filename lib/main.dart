@@ -84,21 +84,21 @@ class HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: FilterButton(),
+            child: (_cardPool == null)
+                ? Text("...")
+                : FilterButton(cardPool: _cardPool!),
           )
         ],
       ),
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          (_currentCards) == null
+          (_currentCards == null)
               ? Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text("Loading..."),
                 )
-              : SearchWidget(
-                  _currentCards!,
-                ),
-          (_currentCards) == null
+              : SearchWidget(),
+          (_currentCards == null)
               ? Text("")
               : Padding(
                   padding: const EdgeInsets.only(top: 8.0),

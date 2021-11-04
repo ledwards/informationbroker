@@ -3,22 +3,29 @@ import 'package:informationbroker/models/SwCard.dart';
 
 class FilterSet with ChangeNotifier {
   late final List<SwCard> cardPool;
-  String? searchTerm;
+  String? titleSearchTerm;
+  String? gametextSearchTerm;
 
   List<SwCard> get cards {
     // TODO: apostrophes, and maybe other letters don't work here
-    List<SwCard> _searchedCards = searchTerm == null
+    List<SwCard> _titleSearchedCards = titleSearchTerm == null
         ? cardPool
         : cardPool.where((element) {
             return SwCard.comparisonTitle(element.title)
-                .contains(SwCard.comparisonTitle(searchTerm!));
+                .contains(SwCard.comparisonTitle(titleSearchTerm!));
           }).toList();
 
-    return _searchedCards;
+    List<SwCard> _gametextSearchedCards = titleSearchTerm == null
+        ? cardPool
+        : cardPool.where((card) {
+            return card.gametext.contains(gametextSearchTerm!);
+          }).toList();
+
+    return _titleSearchedCards;
   }
 
   void setSearchTerm(query) {
-    searchTerm = query;
+    titleSearchTerm = query;
     notifyListeners();
   }
 }

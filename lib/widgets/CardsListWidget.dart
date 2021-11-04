@@ -46,12 +46,12 @@ class _CardsListWidgetState extends State<CardsListWidget> {
               padding: const EdgeInsets.all(1.0),
               color: card.side == 'Dark' ? Colors.black45 : Colors.white54,
               child: Row(children: [
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Image(
-                    image: NetworkImage(card.imageUrl),
-                  ),
-                ),
+                // Padding(
+                // padding: const EdgeInsets.all(4.0),
+                // child: Image(
+                // image: NetworkImage(card.imageUrl),
+                // ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Column(
